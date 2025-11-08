@@ -101,7 +101,7 @@ body {
 }
 
 .btn {
-    padding: 16px 40px;
+    padding: 16px 30px;
     font-size: 18px;
     border: none;
     border-radius: 8px;
@@ -110,7 +110,26 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px var(--shadow);
     color: white;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Increased gap slightly for SVGs */
 }
+
+/* Updated .icon styles */
+.btn .icon {
+    display: inline-flex; /* Use flex to help center SVG */
+    align-items: center;
+}
+
+/* NEW style for SVG icons */
+.icon svg {
+    width: 1.1em; /* Size relative to button font-size */
+    height: 1.1em;
+    fill: currentColor; /* Inherit the button's text color (white) */
+}
+
 
 .btn:hover {
     transform: translateY(-2px);
@@ -155,8 +174,9 @@ body {
     }
     
     .btn {
-        padding: 12px 30px;
+        padding: 12px 20px;
         font-size: 16px;
+        gap: 8px; /* Smaller gap on mobile */
     }
     
     .container {
@@ -167,23 +187,17 @@ body {
 
 .btn-pip {
     background-color: #f0a938;
-    font-size: 20px;
 }
 
 .btn-pip:hover {
     background-color: #f6bb5c;
 }
 
-.info-text {
-    margin-top: 30px;
-    font-size: 14px;
-    opacity: 0.6;
-    font-style: italic;
+/* NEW Styles for Fullscreen Button */
+.btn-fullscreen {
+    background-color: #6c757d; /* A neutral gray color */
 }
 
-@media (max-width: 768px) {
-    .info-text {
-        font-size: 12px;
-        margin-top: 20px;
-    }
+.btn-fullscreen:hover {
+    background-color: #5a6268;
 }

@@ -20,6 +20,7 @@ const startBtn = document.getElementById('startBtn');
 const stopBtn = document.getElementById('stopBtn');
 const resetBtn = document.getElementById('resetBtn');
 const pipBtn = document.getElementById('pipBtn');
+const fullscreenBtn = document.getElementById('fullscreenBtn'); // NEW
 
 let startTime = 0;
 let elapsedTime = 0;
@@ -111,6 +112,13 @@ function updateDisplay(ms) {
     const formatted = formatTime(ms);
     display.textContent = formatted.time;
     millisecondsDisplay.textContent = formatted.ms;
+    
+    // NEW LOGIC: Hide milliseconds after 1 minute (60000 ms)
+    if (ms >= 60000) {
+        millisecondsDisplay.style.display = 'none';
+    } else {
+        millisecondsDisplay.style.display = 'block'; // Ensure it's visible if reset
+    }
 }
 
 // Timer function
@@ -118,8 +126,7 @@ function startTimer() {
     timerInterval = setInterval(() => {
         elapsedTime = Date.now() - startTime;
         updateDisplay(elapsedTime);
-        saveState();
-    }, 10);
+    }, 10); // Interval back to 10ms for smooth milliseconds
 }
 
 // Toggle button visibility
@@ -205,10 +212,19 @@ pipBtn.addEventListener('click', async () => {
             ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-color');
             
             const formatted = formatTime(elapsedTime);
-            ctx.font = 'bold 80px monospace';
-            ctx.fillText(formatted.time, canvas.width / 2, canvas.height / 2 - 30);
-            ctx.font = 'bold 40px monospace';
-            ctx.fillText(formatted.ms, canvas.width / 2, canvas.height / 2 + 40);
+            
+            // NEW LOGIC: Match the main display's behavior
+            if (elapsedTime < 60000) {
+                // Show with milliseconds
+                ctx.font = 'bold 80px monospace';
+                ctx.fillText(formatted.time, canvas.width / 2, canvas.height / 2 - 30);
+                ctx.font = 'bold 40px monospace';
+                ctx.fillText(formatted.ms, canvas.width / 2, canvas.height / 2 + 40);
+            } else {
+                // Show only time, centered
+                ctx.font = 'bold 80px monospace';
+                ctx.fillText(formatted.time, canvas.width / 2, canvas.height / 2);
+            }
             
             requestAnimationFrame(updateCanvas);
         };
@@ -216,6 +232,29 @@ pipBtn.addEventListener('click', async () => {
         
     } catch (error) {
         alert('Picture-in-Picture not supported or permission denied. Use browser\'s minimize button instead.');
+    }
+});
+
+// NEW: Fullscreen toggle logic
+fullscreenBtn.addEventListener('click', () => {
+    const docEl = document.documentElement;
+
+    const requestFullscreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullscreen || docEl.msRequestFullscreen;
+    const exitFullscreen = document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen;
+    const fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+
+    try {
+        if (!fullscreenElement) {
+            if (requestFullscreen) {
+                requestFullscreen.call(docEl);
+            }
+        } else {
+            if (exitFullscreen) {
+                exitFullscreen.call(document);
+            }
+        }
+    } catch (error) {
+        alert('Fullscreen API not supported or permission denied.');
     }
 });
 
@@ -235,14 +274,5 @@ window.addEventListener('beforeunload', () => {
     saveState();
 });
 
-// Clean up expired data on load
-function cleanExpiredData() {
-    const keys = Object.keys(localStorage);
-    keys.forEach(key => {
-        getWithExpiry(key); // This will auto-remove expired items
-    });
-}
-
 // Initialize
-cleanExpiredData();
 loadState();
