@@ -2,7 +2,7 @@
 const themeBtn = document.getElementById('themeBtn');
 const html = document.documentElement;
 
-// Load saved theme (defaults to dark)
+// Load saved theme
 const savedTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', savedTheme);
 
@@ -126,9 +126,9 @@ function startTimer() {
 function toggleButtons(running) {
     if (running) {
         startBtn.style.display = 'none';
-        stopBtn.style.display = 'flex';
+        stopBtn.style.display = 'inline-block';
     } else {
-        startBtn.style.display = 'flex';
+        startBtn.style.display = 'inline-block';
         stopBtn.style.display = 'none';
     }
 }
@@ -180,6 +180,14 @@ pipBtn.addEventListener('click', async () => {
         canvas.height = 360;
         const ctx = canvas.getContext('2d');
         
+        // Style canvas
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-color');
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-color');
+        ctx.font = 'bold 80px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
         // Stream canvas
         const stream = canvas.captureStream(30);
         const video = document.createElement('video');
@@ -192,24 +200,15 @@ pipBtn.addEventListener('click', async () => {
         
         // Update canvas continuously
         const updateCanvas = () => {
-            // Background
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            ctx.fillStyle = isDark ? '#1f1f1f' : '#fff9e6';
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-color');
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Main time
-            ctx.fillStyle = isDark ? '#f5f5f5' : '#1a1a1a';
-            ctx.font = 'bold 90px monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-color');
             
             const formatted = formatTime(elapsedTime);
+            ctx.font = 'bold 80px monospace';
             ctx.fillText(formatted.time, canvas.width / 2, canvas.height / 2 - 30);
-            
-            // Milliseconds in yellow
-            ctx.fillStyle = '#FDB813';
-            ctx.font = 'bold 50px monospace';
-            ctx.fillText(formatted.ms, canvas.width / 2, canvas.height / 2 + 50);
+            ctx.font = 'bold 40px monospace';
+            ctx.fillText(formatted.ms, canvas.width / 2, canvas.height / 2 + 40);
             
             requestAnimationFrame(updateCanvas);
         };
