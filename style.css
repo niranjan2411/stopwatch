@@ -144,6 +144,28 @@ body {
 .btn-reset:hover {
     background-color: var(--btn-reset-hover);
 }
+.btn-pip {
+    background-color: #9C27B0;
+    font-size: 20px;
+}
+
+.btn-pip:hover {
+    background-color: #7B1FA2;
+}
+
+.info-text {
+    margin-top: 30px;
+    font-size: 14px;
+    opacity: 0.6;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .info-text {
+        font-size: 12px;
+        margin-top: 20px;
+    }
+}
 
 @media (max-width: 768px) {
     #display {
