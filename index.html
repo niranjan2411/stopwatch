@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Hours Stopwatch</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="theme-toggle">
+            <button id="themeBtn" aria-label="Toggle theme">
+                <span class="sun-icon">☀️</span>
+                <span class="moon-icon">🌙</span>
+            </button>
+        </div>
+        
+        <div class="stopwatch-display">
+            <div id="display">00:00:00</div>
+            <div id="milliseconds">000</div>
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn" class="btn btn-start">Start</button>
+            <button id="stopBtn" class="btn btn-stop" style="display: none;">Stop</button>
+            <button id="resetBtn" class="btn btn-reset">Reset</button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
