@@ -3,7 +3,7 @@
 ### [View Live App](https://stopwatch-theta-sooty.vercel.app/)
 
 A modern, responsive, and feature-rich stopwatch application built with plain HTML, CSS, and JavaScript. It's designed for tracking work hours, with a clean UI and persistent state.
-<img width="1000" height="700" alt="ab" src="https://github.com/user-attachments/assets/7b51328a-7178-473c-abbb-952dbce09ce7" />
+<img width="1440" height="808" alt="Screenshot 2025-11-10 at 11 23 20 AM" src="https://github.com/user-attachments/assets/5580a0f7-68bd-4095-ae74-a1811cb70fbc" />
 
 
 ## ✨ Features
@@ -43,3 +43,4 @@ You don't need any complex setup or build tools to run this project.
 
 3.  **Open the `index.html` file:**
     Simply open the `index.html` file directly in your web browser.
+
