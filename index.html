@@ -2,188 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Stopwatch</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23FDB813' stroke='%23000' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='5' fill='%23000'/%3E%3Cline x1='50' y1='50' x2='50' y2='20' stroke='%23000' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='50' y1='50' x2='70' y2='50' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
   <style>
-    /* CSS Variables for easy theme adjustments */
-    :root {
-      --bg-color: #000000;
-      --card-bg: #0a0a0a;
-      --primary-color: #ac8b21;
-      --text-color: #e09b06;
-      --white: #ffffff;
-      --btn-bg: #1e293b;
-      --btn-hover: #334155;
-    }
-
     * {
       box-sizing: border-box;
     }
-
     body {
-      font-family: "Inter", system-ui, -apple-system, sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
+      font-family: "Inter", system-ui, sans-serif;
+      background: black;
+      color: #e09b06;
       display: grid;
       place-items: center;
       margin: 0;
       padding: 1rem;
-      /* dvh handles mobile browser bars better than vh */
       min-height: 100vh;
-      min-height: 100dvh; 
+      min-height: 100dvh;
     }
-
     .card {
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
+      background: black;
+      border-radius: 16px;
       padding: 2rem;
-      width: 100%;
-      max-width: 480px; /* Cap width for large screens */
+      width: min(400px, 90vw);
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-
     h1 {
-      color: var(--white);
-      font-size: clamp(1.2rem, 4vw, 1.5rem);
-      margin: 0 0 1rem 0;
-      letter-spacing: 1px;
-      opacity: 0.9;
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
     }
-
     .time {
-      /* Fluid typography: scales between 3rem and 6rem depending on screen width */
-      font-size: clamp(3rem, 15vw, 6rem);
+      font-size: clamp(2.5rem, 13vw, 3.8rem);
       font-weight: 700;
-      margin: 0.5rem 0 1.5rem 0;
+      margin: 1rem 0;
       font-variant-numeric: tabular-nums;
-      line-height: 1;
-      color: var(--white);
+      white-space: nowrap;
     }
-
     .controls {
       display: flex;
       justify-content: center;
-      width: 100%;
       gap: 0.75rem;
-    }
-
-    button {
-      background: var(--btn-bg);
-      color: var(--white);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 1rem;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      flex: 1; /* Allow buttons to share space equally */
-    }
-
-    button:hover {
-      background: var(--btn-hover);
-      transform: translateY(-1px);
-    }
-
-    button:active {
-      transform: translateY(1px);
-    }
-
-    /* Start Button Styling */
-    button.primary {
-      background: var(--primary-color);
-      color: #000;
-      border-color: rgba(255,255,255,0.2);
-      font-weight: 700;
-      flex: 1.5; /* Make start button slightly larger */
-    }
-
-    button.primary:hover {
-      filter: brightness(1.1);
-      background: var(--primary-color);
-    }
-
-    /* Pause State Styling (Toggled via JS) */
-    button.paused {
-        background-color: var(--btn-bg) !important;
-        color: var(--white) !important;
-        border: 1px solid rgba(255, 70, 70, 0.5) !important;
-    }
-
-    .laps {
-      margin-top: 1.5rem;
+      margin-top: 1rem;
       width: 100%;
-      max-height: 200px;
+    }
+    button {
+      background: #1e293b;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex: 1;
+    }
+    
+    button:hover {
+      background: #334155;
+    }
+    
+    button.primary {
+        border: 1px solid rgba(255, 255, 255, 0.536);
+        background: #ac8b21;
+        color: #000000;
+        font-weight: bold;
+        flex: 1.5;
+    }
+ 
+    .laps {
+      margin-top: 1rem;
+      max-height: 150px;
       overflow-y: auto;
       text-align: left;
       font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.7);
-      
-      /* Custom Scrollbar */
-      scrollbar-width: thin;
-      scrollbar-color: #333 transparent;
+      color: white;
+      width: 100%;
     }
-
-    .laps::-webkit-scrollbar {
-        width: 6px;
-    }
-    .laps::-webkit-scrollbar-thumb {
-        background-color: #333;
-        border-radius: 10px;
-    }
-
     .lap {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 0.75rem 0.5rem;
-    }
-    
-    .lap span:nth-child(2) {
-        color: var(--text-color);
-        font-family: monospace;
-        font-size: 1rem;
+      padding: 0.25rem 0;
     }
 
-    /* --- RESPONSIVE BREAKPOINTS --- */
-
-    /* Small Mobile Phones (e.g., iPhone SE, Galaxy Fold) */
-    @media (max-width: 380px) {
-        .card {
-            padding: 1.5rem 1rem;
-        }
-        .controls {
-            flex-direction: column; /* Stack buttons vertically */
-        }
-        button {
-            width: 100%;
-            padding: 0.8rem;
-        }
-        button.primary {
-            order: -1; /* Keep start button at top */
-            padding: 1rem;
-        }
-    }
-
-    /* Landscape Mode on Mobile */
-    @media (max-height: 500px) and (orientation: landscape) {
-        .card {
-            flex-direction: row;
-            flex-wrap: wrap;
-            padding: 1rem;
-            max-width: 600px;
-            justify-content: center;
-        }
-        h1 { width: 100%; display: none; } /* Hide title on very short screens */
-        .time { margin: 0 2rem 0 0; }
-        .controls { width: auto; }
-        .laps { max-height: 100px; margin-top: 0.5rem; }
+    @media (max-width: 350px) {
+        .controls { flex-direction: column; }
+        button { width: 100%; }
     }
   </style>
 </head>
@@ -212,8 +120,9 @@
     let running = false;
     let laps = [];
     let intervalId = null;
+    let lastTitleString = ""; // NEW: Tracks the last title to prevent flickering
 
-    // Load State
+    // Load state from local storage
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const state = JSON.parse(saved);
@@ -230,18 +139,21 @@
         running = true;
         
         startStopBtn.textContent = "Pause";
-        startStopBtn.classList.add("paused"); // Use CSS class instead of inline style
+        startStopBtn.style.backgroundColor = "#1e293b";
+        startStopBtn.style.color = "#ffffff";
         
-        intervalId = setInterval(updateDisplay, 37); // Faster update rate for smoothness
+        // Use a standard interval. 
+        // Note: Browsers will automatically slow this down to ~1000ms 
+        // when in background tabs. Our new logic handles that.
+        intervalId = setInterval(updateDisplay, 37); 
       } else {
         // PAUSE
         running = false;
         clearInterval(intervalId);
-        updateDisplay();
-        
+        updateDisplay(); 
         startStopBtn.textContent = "Start";
-        startStopBtn.classList.remove("paused"); // Revert to CSS default
-        
+        startStopBtn.style.backgroundColor = "#ac8b21";
+        startStopBtn.style.color = "#000000";
         saveState();
       }
     };
@@ -251,12 +163,16 @@
       clearInterval(intervalId);
       elapsed = 0;
       laps = [];
+      lastTitleString = ""; // Reset title tracker
       
       startStopBtn.textContent = "Start";
-      startStopBtn.classList.remove("paused");
+      startStopBtn.style.backgroundColor = "#ac8b21";
+      startStopBtn.style.color = "#000000";
       
       renderDisplay(elapsed);
       renderLaps();
+      
+      document.title = "Stopwatch";
       saveState();
     };
 
@@ -272,26 +188,38 @@
       if (running) {
         elapsed = Date.now() - startTime;
         renderDisplay(elapsed);
-        // Only update title every second to prevent browser throttling/flicker
-        if(elapsed % 1000 < 50) {
-             document.title = formatTime(elapsed) + " — Stopwatch";
+        
+        // FIX: Compare strings instead of math.
+        // This is robust against background throttling.
+        const titleTime = formatTimeNoMs(elapsed);
+        if (titleTime !== lastTitleString) {
+            document.title = titleTime + " — Stopwatch";
+            lastTitleString = titleTime;
         }
-      } 
+      }
     }
 
     function renderDisplay(ms) {
       display.textContent = formatTime(ms);
     }
 
+    // With Milliseconds (For Main Display)
     function formatTime(ms) {
       const total = Math.floor(ms);
       const milli = total % 1000;
       const s = Math.floor(total / 1000) % 60;
       const m = Math.floor(total / 60000) % 60;
       const h = Math.floor(total / 3600000);
-      
-      // Removed milliseconds from title for cleaner tab view, keeping distinct here
       return `${pad(h)}:${pad(m)}:${pad(s)}.${String(milli).padStart(3, "0")}`;
+    }
+
+    // Without Milliseconds (For Tab Title)
+    function formatTimeNoMs(ms) {
+      const total = Math.floor(ms);
+      const s = Math.floor(total / 1000) % 60;
+      const m = Math.floor(total / 60000) % 60;
+      const h = Math.floor(total / 3600000);
+      return `${pad(h)}:${pad(m)}:${pad(s)}`;
     }
 
     function pad(n) {
@@ -301,13 +229,13 @@
     function renderLaps() {
       lapsContainer.innerHTML = "";
       if (laps.length === 0) {
-        lapsContainer.innerHTML = "<div style='text-align:center; padding:1rem; opacity:0.5'>No laps recorded</div>";
+        lapsContainer.textContent = "No laps yet";
         return;
       }
       laps.forEach((t, i) => {
         const div = document.createElement("div");
         div.className = "lap";
-        div.innerHTML = `<span>Lap ${laps.length - i}</span><span>${formatTime(t)}</span>`;
+        div.innerHTML = `<span>Lap ${laps.length - i} - </span><span>${formatTime(t)}</span>`;
         lapsContainer.appendChild(div);
       });
     }
@@ -325,6 +253,15 @@
       }
       saveState();
     });
+    
+    // FIX: Force an immediate update when the user switches back to this tab
+    // This removes any visual "lag" that happened while in background.
+    document.addEventListener("visibilitychange", () => {
+        if (!document.hidden && running) {
+            updateDisplay();
+        }
+    });
+
   </script>
 </body>
 </html>
